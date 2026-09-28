@@ -1,0 +1,34 @@
+{
+  "name": "jsm-mcmdash",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sync": "rm -rf public migrations && mkdir -p public migrations && cp -r node_modules/@motionbug/setupmanagerhud-core/dist/. public/ && cp -r node_modules/@motionbug/setupmanagerhud-core/migrations/. migrations/",
+    "build": "npm run sync",
+    "deploy": "wrangler d1 migrations apply DB --remote && wrangler deploy",
+    "dev": "wrangler dev",
+    "upgrade": "npm update @motionbug/setupmanagerhud-core && npm run sync"
+  },
+  "dependencies": {
+    "@motionbug/setupmanagerhud-core": "^1.2.5"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241127.0",
+    "typescript": "^5.3.3",
+    "wrangler": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "cloudflare": {
+    "bindings": {
+      "DB": {
+        "description": "D1 database used to store Setup Manager webhook events, dashboard history, stats, and filters."
+      },
+      "WEBHOOK_TOKEN": {
+        "description": "Required shared secret for Setup Manager webhook POSTs. Generate it with `openssl rand -hex 24`, paste it here, save it securely, and configure the exact same value in Setup Manager. Do not leave blank."
+      }
+    }
+  }
+}

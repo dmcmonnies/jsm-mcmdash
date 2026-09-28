@@ -1,0 +1,35 @@
+name = "jsm-mcmdash"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Static assets (synced from npm package)
+[assets]
+directory = "./public"
+
+# Durable Objects for real-time WebSocket
+[[durable_objects.bindings]]
+name = "DASHBOARD_ROOM"
+class_name = "DashboardRoom"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["DashboardRoom"]
+
+# D1 for event persistence
+# The Deploy Button provisions this automatically
+[[d1_databases]]
+binding = "DB"
+database_name = "jsm-mcmdash-events"
+database_id = "5b72ea27-cb1d-4e2e-9ffd-372e0019f5a7"
+
+# Webhook token authentication (required)
+# The Deploy Button prompts for this from .dev.vars.example.
+# Manual deploys can set it with: npx wrangler secret put WEBHOOK_TOKEN
+[secrets]
+required = ["WEBHOOK_TOKEN"]
+
+# Optional: Cloudflare Access protection
+# [vars]
+# CF_ACCESS_AUD = "your-audience-tag"
+# CF_ACCESS_TEAM_DOMAIN = "your-team.cloudflareaccess.com"
